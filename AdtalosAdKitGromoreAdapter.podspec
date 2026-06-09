@@ -9,11 +9,11 @@
 Pod::Spec.new do |spec|
 
   spec.name         = "AdtalosAdKitGromoreAdapter"
-  spec.version      = "0.0.1"
+  spec.version      = "0.0.2"
   spec.summary      = "AdtalosAdKit 广告 SDK 的Gromore Adapter"
 
   spec.description  = <<-DESC
-                   新义互联广告SDK的 Taku Adapter，提供广告展示和交互功能。
+                   新义互联广告SDK的 Gromore Adapter，提供广告展示和交互功能。
                    DESC
 
   spec.homepage     = "https://github.com/adtalos/AdtalosAdKitGromoreAdapter"
@@ -24,7 +24,9 @@ Pod::Spec.new do |spec|
   
   spec.ios.deployment_target = "12.0"
 
-  spec.vendored_frameworks  = "AdtalosAdKitGromoreAdapter.xcframework"
+  spec.static_framework = true
+
+  spec.source_files = "AdtalosAdKitGromoreAdapter/**/*.swift"
 
   spec.source = {
     :git => "https://github.com/adtalos/AdtalosAdKitGromoreAdapter.git",

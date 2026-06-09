@@ -1,4 +1,0 @@
-framework module AdtalosAdKitGromoreAdapter {
-  header "AdtalosAdKitGromoreAdapter-Swift.h"
-  requires objc
-}
