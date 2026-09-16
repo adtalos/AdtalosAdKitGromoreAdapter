@@ -63,28 +63,35 @@ public final class AdtalosGromoreSplashAdapter: NSObject, BUMCustomSplashAdapter
 
     DispatchQueue.main.async { [weak self, weak window, weak bottomView] in
       guard let self, let ad = self.splashAd else { return }
-      if let bottomView = bottomView, let window = window {
+      // GroMore 的 Adapter 接口传入 Window；实际广告展示统一落到 Window 的根控制器。
+      guard let window = window, let viewController = window.rootViewController else {
+        // 没有根控制器时由广告对象自行处理当前控制器展示。
+        ad.show()
+        return
+      }
+      if let bottomView = bottomView {
         self.bottomView = bottomView
-        window.addSubview(bottomView)
+        // 自定义底部 View 与广告使用同一 VC 容器，保持完整的模态层级关系。
+        viewController.view.addSubview(bottomView)
         let size =
-          bottomView.bounds.size == .zero
-          ? CGSize(width: window.bounds.width, height: 0)
+          bottomView.bounds.size == .zero ? CGSize(width: window.bounds.width, height: 0)
           : bottomView.bounds.size
         bottomView.frame = CGRect(
           x: 0,
-          y: window.bounds.height - size.height,
+          y: viewController.view.bounds.height - size.height,
           width: window.bounds.width,
           height: size.height
         )
-        _ = ad.show(view: window, frame: CGRect(
+        // 通过 VC 展示后，落地页 present 时可以位于开屏广告之上。
+        _ = ad.show(viewController: viewController, frame: CGRect(
           x: 0,
           y: 0,
           width: window.bounds.width,
-          height: window.bounds.height - bottomView.frame.height
+          height: viewController.view.bounds.height - bottomView.frame.height
         ))
-        return
+      } else {
+        ad.show()
       }
-      ad.show()
     }
   }
 

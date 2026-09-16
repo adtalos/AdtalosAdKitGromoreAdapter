@@ -9,7 +9,7 @@
 Pod::Spec.new do |spec|
 
   spec.name         = "AdtalosAdKitGromoreAdapter"
-  spec.version      = "1.0.1"
+  spec.version      = "1.0.2"
   spec.summary      = "AdtalosAdKit 广告 SDK 的Gromore Adapter"
 
   spec.description  = <<-DESC
@@ -33,7 +33,7 @@ Pod::Spec.new do |spec|
     :tag => spec.version.to_s
   }
 
-  spec.dependency 'AdtalosAdKit', '~> 1.1.2'
+  spec.dependency 'AdtalosAdKit', '~> 1.1.3'
   spec.dependency 'Ads-CN', '~> 7.5.0.8'
 
   spec.swift_versions = ["5.7"]
