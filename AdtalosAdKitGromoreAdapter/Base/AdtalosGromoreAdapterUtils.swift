@@ -18,7 +18,40 @@ enum GromoreAdapterEvent: Int32 {
 }
 
 enum AdtalosGromoreAdapterUtils {
-  static let adapterSDKVersion: String = "1.0.0"
+  static let adapterSDKVersion: String = "1.0.3"
+
+  // Adtalos 自定义配置字段，非 GroMore SDK 官方常量。
+  private static let shakeEnabledKey = "adtalos_shake_enabled"
+
+  static func shakeEnabled(from parameter: [AnyHashable: Any]?) -> Bool {
+    // true 仅允许 Adtalos 广告素材配置的摇一摇生效，不会强制开启未下发的交互。
+    return boolValue(from: parameter?[shakeEnabledKey])
+      ?? boolValue(from: BUAdSDKConfiguration.configuration().mediation.extraData?[shakeEnabledKey])
+      ?? backendBoolValue(
+        from: parameter?[BUMAdLoadingParamCustomJson] as? String, key: shakeEnabledKey)
+      ?? true
+  }
+
+  static func backendBoolValue(from customJSON: String?, key: String) -> Bool? {
+    guard let customJSON, !customJSON.isEmpty else { return nil }
+    do {
+      let config = try JSONSerialization.jsonObject(with: Data(customJSON.utf8)) as? [String: Any]
+      return boolValue(from: config?[key])
+    } catch {
+      return nil
+    }
+  }
+
+  private static func boolValue(from value: Any?) -> Bool? {
+    guard let value else { return nil }
+    if let number = value as? NSNumber {
+      return number.compare(0) != .orderedSame
+    }
+    if let string = value as? String {
+      return string != "false" && string != "0"
+    }
+    return true
+  }
 
   static func ecpmExt(fromPrice price: Int64) -> [String: Any] {
     [

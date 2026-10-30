@@ -33,13 +33,13 @@ final class AdtalosGromoreNativeFeedAdManager: NSObject {
   }
 
   @MainActor
-  func load(placementId: String, adSize: CGSize, loadCount: Int) {
+  func load(placementId: String, adSize: CGSize, loadCount: Int, shakeEnabled: Bool) {
     expectedCount = max(1, loadCount)
     deliveredToBridge = false
     failed = false
     disposeSlotsWithoutRemovingManager()
     slots = (0..<expectedCount).map { _ in
-      Slot(owner: self, placementId: placementId, adSize: adSize)
+      Slot(owner: self, placementId: placementId, adSize: adSize, shakeEnabled: shakeEnabled)
     }
     for slot in slots {
       slot.beginLoad()
@@ -135,18 +135,19 @@ final class AdtalosGromoreNativeFeedAdManager: NSObject {
     let feedAd: FeedAd
 
     @MainActor
-    init(owner: AdtalosGromoreNativeFeedAdManager, placementId: String, adSize: CGSize) {
+    init(
+      owner: AdtalosGromoreNativeFeedAdManager, placementId: String, adSize: CGSize,
+      shakeEnabled: Bool
+    ) {
       self.owner = owner
-      let width = adSize.width > 0 ? adSize.width : UIScreen.main.bounds.width
-      let height = adSize.height > 0 ? adSize.height : 0.0
-      self.feedAd = {
-        guard width > 0, height > 0 else {
-          return FeedAd(unitID: placementId)
-        }
-        return FeedAd(
-          frame: CGRect(x: 0, y: 0, width: Double(width), height: Double(height)),
-          unitID: placementId)
-      }()
+      self.feedAd = FeedAd(
+        frame: CGRect(
+          x: 0, y: 0,
+          width: adSize.width > 0 ? adSize.width : UIScreen.main.bounds.width,
+          height: adSize.height > 0 ? adSize.height : 0
+        ),
+        unitID: placementId)
+      self.feedAd.shakeEnabled = shakeEnabled
       super.init()
     }
 

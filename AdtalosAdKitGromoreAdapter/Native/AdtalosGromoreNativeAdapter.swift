@@ -13,6 +13,9 @@ import UIKit
 @objc(AdtalosGromoreNativeAdapter)
 public final class AdtalosGromoreNativeAdapter: NSObject, BUMCustomNativeAdapter {
 
+  // Adtalos 自定义配置字段，非 GroMore SDK 官方常量。
+  private static let useFixedHeightKey = "adtalos_use_fixed_height"
+
   @MainActor
   public func unregisterClickableViews(forNativeAd nativeAd: Any) {
     guard let ad = nativeAd as? NativeAd else { return }
@@ -65,15 +68,27 @@ public final class AdtalosGromoreNativeAdapter: NSObject, BUMCustomNativeAdapter
     let loadAdCount = Self.nativeLoadAdCount(from: parameter)
     let expressType = (parameter[BUMAdLoadingParamExpressAdType] as? NSNumber)?.intValue ?? 0
     let isTemplate = expressType == 1
+    let shakeEnabled = AdtalosGromoreAdapterUtils.shakeEnabled(from: parameter)
 
     if isTemplate {
+      let appUseFixedHeight = parameter[Self.useFixedHeightKey] as? Bool
+      let customJSON = parameter[BUMAdLoadingParamCustomJson] as? String
+      let backendUseFixedHeight = AdtalosGromoreAdapterUtils.backendBoolValue(
+        from: customJSON, key: Self.useFixedHeightKey)
+      // 显式关闭时使用自适应高度；未配置时保留原有尺寸逻辑。
+      let useFixedHeight = appUseFixedHeight ?? backendUseFixedHeight ?? (size.height > 0)
+      var adSize = size
+      if !useFixedHeight {
+        adSize.height = 0
+      }
       let manager = AdtalosGromoreNativeFeedAdManager(bridge: bridge, adapter: self)
       feedTemplateManager = manager
-      manager.load(placementId: slotID, adSize: size, loadCount: loadAdCount)
+      manager.load(
+        placementId: slotID, adSize: adSize, loadCount: loadAdCount, shakeEnabled: shakeEnabled)
     } else {
       let manager = AdtalosGromoreNativeAdManager(bridge: bridge, adapter: self)
       selfRenderManager = manager
-      manager.load(placementId: slotID, loadCount: loadAdCount)
+      manager.load(placementId: slotID, loadCount: loadAdCount, shakeEnabled: shakeEnabled)
     }
   }
 

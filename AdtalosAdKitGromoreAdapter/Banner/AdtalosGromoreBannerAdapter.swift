@@ -43,6 +43,7 @@ public final class AdtalosGromoreBannerAdapter: NSObject, BUMCustomBannerAdapter
       : adSize
 
     let bannerAd = BannerAd(frame: CGRect(origin: .zero, size: size), unitID: slotID)
+    bannerAd.shakeEnabled = AdtalosGromoreAdapterUtils.shakeEnabled(from: parameter)
     self.bannerAd = bannerAd
     bannerAd.listener = bannerDelegate
     bannerAd.autoRetry = 0

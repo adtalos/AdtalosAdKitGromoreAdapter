@@ -38,6 +38,7 @@ public final class AdtalosGromoreRewardVideoAdapter: NSObject, BUMCustomRewarded
     withSlotID slotID: String, andParameter parameter: [AnyHashable: Any]
   ) {
     let ad = RewardVideoAd(unitID: slotID)
+    ad.shakeEnabled = AdtalosGromoreAdapterUtils.shakeEnabled(from: parameter)
     self.rewardVideoAd = ad
     ad.listener = rewardVideoDelegate
     ad.videoListener = rewardVideoDelegate

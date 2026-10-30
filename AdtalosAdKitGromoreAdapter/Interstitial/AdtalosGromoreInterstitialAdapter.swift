@@ -38,6 +38,7 @@ public final class AdtalosGromoreInterstitialAdapter: NSObject, BUMCustomInterst
     withSlotID slotID: String, andSize size: CGSize, parameter: [AnyHashable: Any]
   ) {
     let ad = InterstitialAd(unitID: slotID)
+    ad.shakeEnabled = AdtalosGromoreAdapterUtils.shakeEnabled(from: parameter)
     self.interstitialAd = ad
     ad.listener = interstitialDelegate
     ad.videoListener = interstitialDelegate

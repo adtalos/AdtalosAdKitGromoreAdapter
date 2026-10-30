@@ -28,12 +28,14 @@ final class AdtalosGromoreNativeAdManager: NSObject {
   }
 
   @MainActor
-  func load(placementId: String, loadCount: Int) {
+  func load(placementId: String, loadCount: Int, shakeEnabled: Bool) {
     expectedCount = max(1, loadCount)
     deliveredToBridge = false
     failed = false
     disposeSlotsWithoutRemovingManager()
-    slots = (0..<expectedCount).map { _ in Slot(owner: self, placementId: placementId) }
+    slots = (0..<expectedCount).map { _ in
+      Slot(owner: self, placementId: placementId, shakeEnabled: shakeEnabled)
+    }
     for slot in slots {
       slot.beginLoad()
     }
@@ -138,9 +140,10 @@ final class AdtalosGromoreNativeAdManager: NSObject {
     let nativeAd: NativeAd
     private var videoMetadataReady = false
 
-    init(owner: AdtalosGromoreNativeAdManager, placementId: String) {
+    init(owner: AdtalosGromoreNativeAdManager, placementId: String, shakeEnabled: Bool) {
       self.owner = owner
       self.nativeAd = NativeAd(unitID: placementId)
+      self.nativeAd.shakeEnabled = shakeEnabled
       super.init()
     }
 

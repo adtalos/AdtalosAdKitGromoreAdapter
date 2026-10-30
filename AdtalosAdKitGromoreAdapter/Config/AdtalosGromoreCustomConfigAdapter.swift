@@ -92,6 +92,11 @@ public final class AdtalosGromoreCustomConfigAdapter: NSObject, BUMCustomConfigA
     let appToken = (initConfig?.appKey ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
     let config = Self.makeConfiguration(token: token, appToken: appToken)
 
+    SDK.setAdnInfo(
+      platform: "gromore",
+      version: AdtalosGromoreAdapterUtils.adapterSDKVersion
+    )
+
     AdtalosGromoreAdapterUtils.reportGromoreEvent(.gromoreInit, ad: nil)
 
     DispatchQueue.main.async {

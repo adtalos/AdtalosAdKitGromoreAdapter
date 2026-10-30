@@ -39,6 +39,7 @@ public final class AdtalosGromoreSplashAdapter: NSObject, BUMCustomSplashAdapter
     bottomView = parameter[BUMAdLoadingParamSPCustomBottomView] as? UIView
 
     let ad = SplashAd(unitID: slotID)
+    ad.shakeEnabled = AdtalosGromoreAdapterUtils.shakeEnabled(from: parameter)
     ad.listener = self.splashDelegate
     ad.autoRetry = 0
     self.splashAd = ad
