@@ -9,7 +9,7 @@
 Pod::Spec.new do |spec|
 
   spec.name         = "AdtalosAdKitGromoreAdapter"
-  spec.version      = "1.0.3"
+  spec.version      = "1.0.4"
   spec.summary      = "AdtalosAdKit 广告 SDK 的Gromore Adapter"
 
   spec.description  = <<-DESC

@@ -118,7 +118,6 @@ final class AdtalosGromoreNativeSelfRenderViewCreator: NSObject, BUMMediatedNati
 
   private weak var nativeAd: NativeAd?
   private weak var rootViewController: UIViewController?
-  private lazy var fallbackView = UIView(frame: .zero)
   private lazy var fallbackMediaView = UIView(frame: .zero)
   private lazy var fallbackImageView = UIImageView(frame: .zero)
   private lazy var fallbackDislikeButton = UIButton(type: .custom)
@@ -126,7 +125,6 @@ final class AdtalosGromoreNativeSelfRenderViewCreator: NSObject, BUMMediatedNati
   private lazy var fallbackDescLabel = UILabel(frame: .zero)
   private lazy var fallbackIconImageView = UIImageView(frame: .zero)
   private lazy var fallbackCallToActionBtn = UIButton(type: .custom)
-  @MainActor private var cachedAdLogoView: UIView?
 
   init(nativeAd: NativeAd) {
     self.nativeAd = nativeAd
@@ -140,19 +138,7 @@ final class AdtalosGromoreNativeSelfRenderViewCreator: NSObject, BUMMediatedNati
 
   @MainActor
   var adLogoView: UIView? {
-    if let cached = cachedAdLogoView {
-      return cached
-    }
-    guard let logo = nativeAd?.nativeResponse?.logo else {
-      return fallbackView
-    }
-
-    let view = UIView(frame: CGRect(origin: .zero, size: logo.size))
-    let imageView = UIImageView(frame: view.bounds)
-    imageView.image = logo
-    view.addSubview(imageView)
-    cachedAdLogoView = view
-    return view
+    nil
   }
 
   var dislikeBtn: UIButton? {

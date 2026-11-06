@@ -18,7 +18,7 @@ enum GromoreAdapterEvent: Int32 {
 }
 
 enum AdtalosGromoreAdapterUtils {
-  static let adapterSDKVersion: String = "1.0.3"
+  static let adapterSDKVersion: String = "1.0.4"
 
   // Adtalos 自定义配置字段，非 GroMore SDK 官方常量。
   private static let shakeEnabledKey = "adtalos_shake_enabled"
